@@ -1,0 +1,86 @@
+{% extends 'shop-template.html' %}
+
+
+{% block content %}
+<!--breadcrumbs area start-->
+<div class="breadcrumbs_area">
+    <div class="container">   
+        <div class="breadcrumbs_inner">  
+            <div class="row">
+                <div class="col-12">
+                    <div class="breadcrumb_content">
+                        <h3>product details</h3>
+                        <ul>
+                            <li><a href="/">home</a></li>
+                            <li><i class="fa fa-angle-right"></i></li>
+                            <li><a href="/shop/{{ product.category }}">shop</a></li>
+                            <li><i class="fa fa-angle-right"></i></li>
+                            <li>product details</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>         
+</div>
+<!--breadcrumbs area end-->
+<div class="single_product_wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-5 col-md-6">
+                <div class="product_gallery">
+                    <div class="tab-content produc_thumb_conatainer">
+                        <div class="tab-pane fade show active" id="p_tab1" role="tabpanel">
+                            <div class="modal_img">
+                                <a href="#"><img src="{{ url_for('uploaded_file', filename=product.image) }}" alt=""></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-7 col-md-6">
+                <div class="product_details">
+                    <h3>{{ product.name }}</h3>
+                    <div class="product_price">
+                        {% if product.promotion is not none and product.promotion|float > 0 %}
+                    <li><span class="current_price" style="text-decoration: line-through;">{{ product.price }} USD</span></li>
+                    <li><span class="current_price">
+                        {{ product.price | float - product.promotion | float }} USD
+                    </span></li>    
+                        {% else %}
+                        <li><span class="current_price">{{ product.price }} USD</span></li>
+                        <li><span class="current_price"></br></span></li>                                   
+                    {% endif %}
+                    <div class="product_description">
+                        <p>{{ product.description  }}</p>
+                        <p>Manufacturer: {{ product.manufacturer }}</p></br>
+                        <div><b>Characteristics:</b></div>
+                        <div>{{ product.characteristics|safe  }}</div>
+                    </div>
+
+
+                    <form action="/shop/add_to_cart" method="POST" class="product_details_action">
+                        <h3>Available Options</h3>
+                        <div class="product_stock">
+                          <label>Quantity</label>
+                          <input type="number" name="quantity" min="1" value="1" max="100" required>
+                        </div>
+                        <input type="hidden" name="product_id" value="{{ product.id }}">
+                        <div class="product_action_link">
+                          <ul>
+                            <li>
+                              <button type="submit" title="Add to Cart" class="product_cart">Add to Cart</button>
+                            </li>
+                          </ul>
+                        </div>
+                      </form>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="margin-bottom: 100px;"></div>
+
+{% endblock %}

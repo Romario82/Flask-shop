@@ -1,0 +1,72 @@
+{% extends 'admin-template.html' %}
+
+
+{% block content %}
+<!-- Краткая статистика -->
+<div class="row">
+    <div class="col-md-3 mb-4">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <h5 class="card-title">Goods</h5>
+                <p class="card-text">1234</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-4">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <h5 class="card-title">Orders</h5>
+                <p class="card-text">56</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-4">
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <h5 class="card-title">Clients</h5>
+                <p class="card-text">789</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-4">
+        <div class="card text-white bg-warning">
+            <div class="card-body">
+                <h5 class="card-title">Income</h5>
+                <p class="card-text">$10,234</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Последние заказы -->
+<h2>Latest orders</h2>
+<div class="table-responsive">
+    <table class="table table-striped table-sm">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Client</th>
+                <th>Data</th>
+                <th>Status</th>
+                <th>Sum</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1001</td>
+                <td>Иван Иванов</td>
+                <td>2023-06-25</td>
+                <td>Выполнен</td>
+                <td>$100.00</td>
+            </tr>
+            <tr>
+                <td>1002</td>
+                <td>Петр Петров</td>
+                <td>2023-06-24</td>
+                <td>В обработке</td>
+                <td>$75.50</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

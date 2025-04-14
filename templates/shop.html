@@ -1,0 +1,319 @@
+{% extends 'shop-template.html' %}
+
+
+{% block content %}
+<!--breadcrumbs area start-->
+<div class="breadcrumbs_area">
+    <div class="container">   
+        <div class="breadcrumbs_inner">  
+            <div class="row">
+                <div class="col-12">
+                    <div class="breadcrumb_content">
+                        <h3>shop</h3>
+                        <ul>
+                            <li><a href="/">home</a></li>
+                            <li><i class="fa fa-angle-right"></i></li>
+                            <li>shop</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>         
+</div>
+<!--breadcrumbs area end-->
+
+<div class = "shop_wrapper shop_reverse">
+    <div class="container">
+    <div class="row">
+        <div class="col-lg-3 col-md-12">
+            <div class="sidebar_widget">
+                
+                <!--manufacturer start-->
+                <div class="widget_list manufacturer">
+                    <h3>Manufacturer</h3>
+                    <ul>
+                        {% for manufacturer in manufacturers %}
+                        <li>
+                            <a href="{{ url_for('shop', category_name=category_name, manufacturer=manufacturer) }}">
+                                {{ manufacturer }}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <!--manufacturer start-->
+                
+                <!--widget  price start-->
+                <div class="widget_list price">
+                    <h3>Price</h3>
+                    <ul>
+                        <li>
+                            <a href="{{ url_for('shop', category_name=category_name, manufacturer=manufacturer, min_price=0, max_price=500.00) }}" class="price-filter" data-min="0" data-max="500.00">
+                                $0.00 - $500.00
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ url_for('shop', category_name=category_name, manufacturer=manufacturer, min_price=500.01, max_price=max_price) }}" class="price-filter" data-min="500.01" data-max="{{ max_price }} + 10">
+                                $500.00 - ${{ max_price }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <!--widget  price start-->
+                
+                <!--popular tags area-->
+                <div class="widget_list tag_widget  ">
+                    <h3>popular tags</h3>
+                    <div class="block_tags">
+                        {% for category in categories %}
+                        <a href="{{ url_for('shop', category_name=category) }}">{{ category  }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+                <!--popular tags end-->
+                
+                <!--widget banner start-->
+                <div class="widget_list banner">
+                    <div class="banner_thumb">
+                        <a href="#"><img src="assets/img/banner/banner9.png" alt=""></a>
+                    </div>
+                </div>
+                <!--widget banner end-->
+            </div>
+        </div>
+
+        <div class="col-lg-9 col-md-12">
+            <div class="shop_toolbar">
+
+                <div class="list_button">
+                    <ul class="nav" role="tablist">
+                        <li>
+                            <a class="active" data-toggle="tab" href="#large" role="tab" aria-controls="large" aria-selected="true"><i class="ion-grid"></i></a>
+                        </li>
+                        <li>
+                            <a data-toggle="tab" href="#list" role="tab" aria-controls="list" aria-selected="false"><i class="ion-android-menu"></i></a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="select_option number">
+                    <form method="get" action="{{ url_for('shop', category_name=category_name) }}">
+                        <label>Show:</label>
+                        <select name="per_page" id="short" onchange="this.form.submit()">
+                            <option value="9" {% if request.args.get('per_page', '9') == '9' %}selected{% endif %}>9</option>
+                            <option value="18" {% if request.args.get('per_page') == '18' %}selected{% endif %}>18</option>
+                            <option value="30" {% if request.args.get('per_page') == '30' %}selected{% endif %}>30</option>
+                        </select>
+                        <input type="hidden" name="sort" value="{{ request.args.get('sort', '') }}">
+                        <input type="hidden" name="manufacturer" value="{{ request.args.get('manufacturer', '') }}">
+                        <input type="hidden" name="min_price" value="{{ request.args.get('min_price', '') }}">
+                        <input type="hidden" name="max_price" value="{{ request.args.get('max_price', '') }}">
+                        <input type="hidden" name="page" value="{{ request.args.get('page', 1) }}">
+                    </form>
+                </div>
+                <div class="select_option">
+                    <form method="get" action="{{ url_for('shop', category_name=category_name) }}">
+                        <label>Sort By</label>
+                        <select name="sort" id="sort-price" onchange="this.form.submit()">
+                            <option>Default</option>
+                            <option value="price_asc" {% if request.args.get('sort') == 'price_asc' %}selected{% endif %}>Price: Lowest</option>
+                            <option value="price_desc" {% if request.args.get('sort') == 'price_desc' %}selected{% endif %}>Price: Highest</option>
+                        </select>
+                        <input type="hidden" name="sort" value="{{ request.args.get('sort', '') }}">
+                        <input type="hidden" name="manufacturer" value="{{ request.args.get('manufacturer', '') }}">
+                        <input type="hidden" name="min_price" value="{{ request.args.get('min_price', '') }}">
+                        <input type="hidden" name="max_price" value="{{ request.args.get('max_price', '') }}">
+                        <input type="hidden" name="page" value="{{ request.args.get('page', 1) }}">
+                    </form>
+                </div>
+            </div>
+            <div class="shop_tab_product">
+            <div id="products-container">
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="large" role="tabpanel">
+                    <div class="row">
+                        {% for product in products %}
+                        <div class="col-lg-4 col-md-6 col-sm-6">
+                            <div class="single_product"> 
+                                <div class="product_thumb">
+                                     <a href="{{ url_for('product_details', name=product.name) }}"><img src="{{ url_for('uploaded_file', filename=product.image) }}" alt=""></a>
+                                     <div class="btn_quickview">
+                                        <a href="#" class="quickview-btn" data-toggle="modal" data-target="#modal_box" data-product-id="{{ product.id }}" title="Quick View"><i class="ion-ios-eye"></i></a>
+                                    </div>
+                                </div> 
+                                <div class="product_content">   
+                                    <h3><a href="{{ url_for('product_details', name=product.name) }}">{{ product.name }}</a></h3>
+                                    <h6>Manufacturer: {{ product.manufacturer }}</h6>
+                                    <div class="product_price">
+                                        {% if product.promotion is not none and product.promotion|float > 0 %}
+                                        <li><span class="current_price" style="text-decoration: line-through;">{{ product.price }} USD</span></li>
+                                        <li><span class="current_price">
+                                            {{ product.price | float - product.promotion | float }} USD
+                                        </span></li>    
+                                            {% else %}
+                                            <li><span class="current_price">{{ product.price }} USD</span></li>
+                                            <li><span class="current_price"></br></span></li>                                   
+                                        {% endif %}
+                                    </div>
+                                    <div class="product_action">
+                                        <ul>
+                                            <li class="product_cart"><a href="cart.html" title="" data-original-title="Add to Cart">Add to Cart</a></li>
+                                        </ul>
+                                    </div>
+                                </div>    
+                            </div>
+                        </div>
+                        {% endfor %}
+                </div>
+                    </div>
+                    <div class="tab-pane fade" id="list" role="tabpanel">
+                        {% for product in products %}
+                        <div class="single_product list_item">
+                            <div class="row align-items-center">   
+                                <div class="col-lg-4 col-md-5">
+                                    <div class="product_thumb">
+                                         <a href="{{ url_for('product_details', name=product.name) }}"><img src="{{ url_for('uploaded_file', filename=product.image) }}" alt=""></a>
+                                         <div class="btn_quickview">
+                                            <a href="#" class="quickview-btn" data-toggle="modal" data-target="#modal_box" data-product-id="{{ product.id }}" title="Quick View"><i class="ion-ios-eye"></i></a>
+                                        </div>
+                                    </div> 
+                                </div>
+                                <div class="col-lg-8 col-md-7">
+                                    <div class="product_content">   
+                                        <h3><a href="{{ url_for('product_details', name=product.name) }}">{{ product.name }}</a></h3>
+                                        <div class="product_price">
+                                            {% if product.promotion is not none and product.promotion|float > 0 %}
+                                        <li><span class="current_price" style="text-decoration: line-through;">{{ product.price }} USD</span></li>
+                                        <li><span class="current_price">
+                                            {{ product.price | float - product.promotion | float }} USD
+                                        </span></li>    
+                                            {% else %}
+                                            <li><span class="current_price">{{ product.price }} USD</span></li>
+                                            <li><span class="current_price"></br></span></li>                                   
+                                        {% endif %}
+                                        </div>
+                                        <div class="product_description">
+                                            <p>{{ product.description  }}</p>
+                                            <p>Manufacturer: {{ product.manufacturer }}</p>
+                                            <p>ID: {{product.id}}</p>
+                                        </div>
+                                        <div class="product_action">
+                                            <ul>
+                                                <li class="product_cart"><a href="cart.html" title="" data-original-title="Add to Cart">Add to Cart</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> 
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            </div>
+
+            <div class="pagination_style">
+                <ul>
+                    {% if pagination.has_prev %}
+                        <li><a href="{{ url_for('shop', category_name=category_name, page=pagination.prev_num, sort=request.args.get('sort'), manufacturer=request.args.get('manufacturer'), min_price=request.args.get('min_price'), max_price=request.args.get('max_price')) }}">«</a></li>
+                    {% else %}
+                        <li class="disabled">«</li>
+                    {% endif %}
+            
+                    {% for page_num in pagination.iter_pages(left_edge=2, right_edge=2, left_current=2, right_current=2) %}
+                        {% if page_num %}
+                            {% if page_num == pagination.page %}
+                                <li class="current_number">{{ page_num }}</li>
+                            {% else %}
+                                <li><a href="{{ url_for('shop', category_name=category_name, page=page_num, sort=request.args.get('sort'), manufacturer=request.args.get('manufacturer'), min_price=request.args.get('min_price'), max_price=request.args.get('max_price')) }}">{{ page_num }}</a></li>
+                            {% endif %}
+                        {% else %}
+                            <li class="disabled">…</li>
+                        {% endif %}
+                    {% endfor %}
+            
+                    {% if pagination.has_next %}
+                        <li><a href="{{ url_for('shop', category_name=category_name, page=pagination.next_num, sort=request.args.get('sort'), manufacturer=request.args.get('manufacturer'), min_price=request.args.get('min_price'), max_price=request.args.get('max_price')) }}">»</a></li>
+                    {% else %}
+                        <li class="disabled">»</li>
+                    {% endif %}
+                </ul>
+            </div>
+  
+        </div>
+    </div>
+    </div>
+</div>
+<div class="shipping_area shipping_contact ">
+    <div class="container">
+        <div class="shipping_contact">   
+            <div class="row">
+                <div class="col-lg-4 col-md-4">
+                    <div class="single_shipping">
+                        <div class="shipping_icone">
+                            <span class="pe-7s-call"></span>
+                        </div>
+                        <div class="shipping_content">
+                            <h3>(999) 1234 56789</h3>
+                            <p>Free support line!</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4">
+                    <div class="single_shipping">
+                        <div class="shipping_icone">
+                            <span class="pe-7s-mail"></span>
+                        </div>
+                        <div class="shipping_content">
+                            <h3>Support@plazathemes.com</h3>
+                            <p>Orders Support!</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4">
+                    <div class="single_shipping column_3">
+                        <div class="shipping_icone">
+                            <span class="pe-7s-timer"></span>
+                        </div>
+                        <div class="shipping_content">
+                            <h3>Mon - Fri / 8:00 - 18:00</h3>
+                            <p>Working Days/Hours!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>  
+            
+            <!--newsletter area start-->
+            <div class="newsletter_area">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="field_newsletter">
+                            <div class="newsletter_text">
+                                <h3>Sign Up For Newsletter</h3>
+                                <p>Be the First to Know. Sign up to newsletter today</p>
+                            </div>
+                            <div class="subscribe_form">
+                                <form id="mc-form" class="mc-form footer-newsletter" novalidate="true">
+                                    <input id="mc-email" type="email" autocomplete="off" placeholder="Please enter your email to subscribe" name="EMAIL">
+                                    <button id="mc-submit">Subscribe</button>
+                                    <div class="email_icon">
+                                        <i class="icon-mail"></i>
+                                    </div>
+                                </form>
+                                <!-- mailchimp-alerts Start -->
+                                <div class="mailchimp-alerts text-centre">
+                                    <div class="mailchimp-submitting"></div><!-- mailchimp-submitting end -->
+                                    <div class="mailchimp-success"></div><!-- mailchimp-success end -->
+                                    <div class="mailchimp-error"></div><!-- mailchimp-error end -->
+                                </div><!-- mailchimp-alerts end -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--newsletter area end-->
+        </div>    
+    </div>
+</div>
+
+{% endblock %}

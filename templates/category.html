@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Products in Category</title>
+</head>
+<body>
+    <h1>Products in: {{ category }}</h1>
+    <ul>
+        {% for product in products %}
+        <li>
+            <h2>{{ product.name }}</h2>
+            <p>Price: {{ product.price }}</p>
+            <p>Description: {{ product.description }}</p>
+            <!-- Добавьте остальные поля товара по необходимости -->
+        </li>
+        {% endfor %}
+    </ul>
+	
+	{% for product in products %}
+                        <div class="col-lg-4 col-md-6 col-sm-6">
+                            <div class="single_product"> 
+                                <div class="product_thumb">
+                                     <a href="product-details.html"><img src="{{ url_for('uploaded_file', filename=product.image) }}" alt=""></a>
+                                     <div class="btn_quickview">
+                                         <a href="#" data-toggle="modal" data-target="#modal_box" title="Quick View"><i class="ion-ios-eye"></i></a>
+                                    </div>
+                                </div> 
+                                <div class="product_content">   
+                                    <h3><a href="product-details.html">{{ product.name }}</a></h3>
+                                    <div class="product_price">
+                                        <span class="current_price">{{ product.price }} USD</span>
+                                    </div>
+                                    <div class="product_action">
+                                        <ul>
+                                            <li class="product_cart"><a href="cart.html" title="" data-original-title="Add to Cart">Add to Cart</a></li>
+                                        </ul>
+                                    </div>
+                                </div>    
+                            </div>
+                        </div>
+                        {% endfor %}
+</body>
+</html>
