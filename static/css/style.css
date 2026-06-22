@@ -3219,6 +3219,19 @@
 .widget_list ul li a:hover::before{
     border-color: #2971f5;
 }
+.widget_list ul li a.active::before {
+	background: #2971f5;
+	border-color: #2971f5;
+	content: "\f00c";
+	font-family: FontAwesome;
+	color: #fff;
+	font-size: 10px;
+	line-height: 14px;
+	text-align: center;
+}
+.widget_list ul li a.active {
+	color: #2971f5;
+}
 .widget_list {
 	margin-bottom: 31px;
 }

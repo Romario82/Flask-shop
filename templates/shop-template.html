@@ -3,8 +3,10 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>{% block title %}{% endblock %}</title>
-        <meta name="description" content="{% block meta_description %}{% endblock %}">
+        <title>{% block title %}{{ site_settings.default_title }}{% endblock %}</title>
+        <meta name="description" content="{% block meta_description %}{{ site_settings.default_description }}{% endblock %}">
+        <meta name="keywords" content="{% block meta_keywords %}{{ site_settings.default_keywords }}{% endblock %}">
+        <meta name="robots" content="{{ site_settings.robots }}">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- Favicon -->
         <link rel="shortcut icon" type="image/x-icon" href="static/img/favicon.png">

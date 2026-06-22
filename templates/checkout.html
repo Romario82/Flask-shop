@@ -1,0 +1,115 @@
+{% extends 'shop-template.html' %}
+
+{% block title %}Checkout{% endblock %}
+
+{% block content %}
+<div class="breadcrumbs_area commun_bread">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="breadcrumb_content">
+                    <h3>checkout</h3>
+                    <ul>
+                        <li><a href="{{ url_for('index') }}">home</a></li>
+                        <li><i class="fa fa-angle-right"></i></li>
+                        <li><a href="{{ url_for('cart') }}">cart</a></li>
+                        <li><i class="fa fa-angle-right"></i></li>
+                        <li>checkout</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="Checkout_section">
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="row">
+            <div class="col-12">
+                {% for category, message in messages %}
+                <div class="alert alert-{{ 'danger' if category == 'error' else 'info' }}" role="alert">{{ message }}</div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <form action="{{ url_for('checkout') }}" method="POST">
+            {{ form.hidden_tag() }}
+            <div class="row">
+                <div class="col-lg-6 col-md-6">
+                    <div class="checkout_form">
+                        <h3>Billing Details</h3>
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <label for="customer_name">Full Name <span>*</span></label>
+                                {{ form.customer_name(class_='form-control', id='customer_name', placeholder='Full name') }}
+                                {% for error in form.customer_name.errors %}
+                                <small class="text-danger">{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label for="email">Email <span>*</span></label>
+                                {{ form.email(class_='form-control', id='email', placeholder='Email address') }}
+                                {% for error in form.email.errors %}
+                                <small class="text-danger">{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label for="phone">Phone <span>*</span></label>
+                                {{ form.phone(class_='form-control', id='phone', placeholder='Phone number') }}
+                                {% for error in form.phone.errors %}
+                                <small class="text-danger">{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label for="address">Address <span>*</span></label>
+                                {{ form.address(class_='form-control', id='address', placeholder='Street address, city, zip') }}
+                                {% for error in form.address.errors %}
+                                <small class="text-danger">{{ error }}</small>
+                                {% endfor %}
+                            </div>
+                            <div class="col-12 mb-3 order-notes">
+                                <label for="notes">Order notes (optional)</label>
+                                {{ form.notes(class_='form-control', id='notes', rows=3, placeholder='Notes about your order') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <div class="order_table">
+                        <h3>Your order</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in cart_items %}
+                                <tr>
+                                    <td>{{ item.product.name }} × {{ item.quantity }}</td>
+                                    <td>${{ "%.2f"|format(item.product.effective_price * item.quantity) }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>Order Total</th>
+                                    <th>${{ "%.2f"|format(cart_total) }}</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <div class="order_button">
+                            {{ form.submit(class_='btn') }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

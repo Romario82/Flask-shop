@@ -1,0 +1,44 @@
+{% extends 'shop-template.html' %}
+
+{% block title %}Order placed{% endblock %}
+
+{% block content %}
+<div class="breadcrumbs_area commun_bread">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="breadcrumb_content">
+                    <h3>order complete</h3>
+                    <ul>
+                        <li><a href="{{ url_for('index') }}">home</a></li>
+                        <li><i class="fa fa-angle-right"></i></li>
+                        <li>order complete</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="Checkout_section">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="checkout_form">
+                    <h3>Thank you for your order</h3>
+                    {% if order %}
+                    <p>Your order <strong>#{{ order.id }}</strong> has been placed successfully.</p>
+                    <p>Total: <strong>${{ "%.2f"|format(order.total) }}</strong></p>
+                    <p>We will contact you at <strong>{{ order.user.email }}</strong> regarding delivery.</p>
+                    {% else %}
+                    <p>Your order has been placed successfully.</p>
+                    {% endif %}
+                    <div class="order_button" style="margin-top: 20px;">
+                        <a href="{{ url_for('index') }}" class="btn" style="display:inline-block;padding:10px 20px;color:#fff;background:#2971f5;text-decoration:none;">Continue shopping</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

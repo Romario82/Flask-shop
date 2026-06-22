@@ -47,7 +47,7 @@
             <div class="row align-items-center">
                 <div class="col-lg-3 col-md-4">
                     <div class="logo">
-                        <a href="index.html"><img src="{{ url_for('static', filename='img/logo.png') }}" alt=""></a>
+                        <a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='img/logo.png') }}" alt=""></a>
                     </div>
                 </div>
                 <div class="col-lg-7 col-md-5">
@@ -65,39 +65,29 @@
                         </div>
                         <div class="cart_link">
                             <a href="javascript:void(0)"><i class="ion-ios-cart-outline"></i>My Cart</a>
-                            <span class="cart_count">2</span>
+                            <span class="cart_count">{{ cart_count }}</span>
                             <!--mini cart-->
                              <div class="mini_cart">
                                 <div class="items_nunber">
-                                    <span>2 Items in Cart</span>
+                                    <span>{{ cart_count }} Items in Cart</span>
                                 </div>
                                 <div class="cart_button checkout">
-                                    <a href="checkout.html">Proceed to Checkout</a>
+                                    <a href="{{ url_for('checkout') }}">Proceed to Checkout</a>
                                 </div>
+                                {% for item in cart_items %}
                                 <div class="cart_item">
                                    <div class="cart_img">
-                                       <a href="#"><img src="assets/img/cart/cart1.jpg" alt=""></a>
+                                       <a href="{{ url_for('product_details', name=item.product.name) }}"><img src="{{ url_for('uploaded_file', filename=item.product.image) }}" alt=""></a>
                                    </div>
                                     <div class="cart_info">
-                                        <a href="#">Mr.Coffee 12-Cup</a>
+                                        <a href="{{ url_for('product_details', name=item.product.name) }}">{{ item.product.name }}</a>
                                         <form action="#">
-                                            <input min="0" max="100" type="number">
-                                            <span>$60.00</span>
+                                            <input min="1" max="100" type="number" value="{{ item.quantity }}" readonly>
+                                            <span>${{ "%.2f"|format(item.product.effective_price) }}</span>
                                         </form>
                                     </div>
                                 </div>
-                                <div class="cart_item">
-                                   <div class="cart_img">
-                                       <a href="#"></a>
-                                   </div>
-                                    <div class="cart_info">
-                                        <a href="#">Lid Cover Cookware</a>
-                                        <form action="#">
-                                            <input min="0" max="100" type="number">
-                                            <span>$160.00</span>
-                                        </form>
-                                    </div>
-                                </div>
+                                {% endfor %}
                                 <div class="cart_button view_cart">
                                     <a href="/shop/cart">View and Edit Cart</a>
                                 </div>
@@ -134,7 +124,7 @@
                     <div class="main_menu_inner">
                         <div class="main_menu d-none d-lg-block"> 
                             <ul>
-                                <li class="active"><a href="index.html">Home <i class="fa fa-angle-down"></i></a>
+                                <li class="active"><a href="{{ url_for('index') }}">Home <i class="fa fa-angle-down"></i></a>
                                     <ul class="sub_menu">
                                         {% for category in categories %}
                                         <li><a href="{{ url_for('shop', category_name=category) }}">{{ category  }}</a></li>
@@ -157,7 +147,7 @@
                                                 <li><a href="portfolio.html">portfolio</a></li>
                                                 <li><a href="portfolio-details.html">portfolio details</a></li>
                                                 <li><a href="cart.html">cart</a></li>
-                                                <li><a href="checkout.html">Checkout</a></li>
+                                                <li><a href="{{ url_for('checkout') }}">Checkout</a></li>
                                                 <li><a href="my-account.html">my account</a></li>
                                                 
 
@@ -220,9 +210,9 @@
                         <div class="mobile-menu d-lg-none">
                             <nav>  
                                 <ul>
-                                <li><a href="index.html">Home</a>
+                                <li><a href="{{ url_for('index') }}">Home</a>
                                     <ul>
-                                        <li><a href="index.html">Home 1</a></li>
+                                        <li><a href="{{ url_for('index') }}">Home 1</a></li>
                                         <li><a href="index-2.html">Home 2</a></li>
                                         <li><a href="index-3.html">Home 3</a></li>
                                         <li><a href="index-4.html">Home 4</a></li>
@@ -244,7 +234,7 @@
                                                 <li><a href="portfolio.html">portfolio</a></li>
                                                 <li><a href="portfolio-details.html">portfolio details</a></li>
                                                 <li><a href="cart.html">cart</a></li>
-                                                <li><a href="checkout.html">Checkout</a></li>
+                                                <li><a href="{{ url_for('checkout') }}">Checkout</a></li>
                                                 <li><a href="my-account.html">my account</a></li>
                                                 
 

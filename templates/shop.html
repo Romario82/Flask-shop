@@ -35,9 +35,15 @@
                     <ul>
                         {% for manufacturer in manufacturers %}
                         <li>
-                            <a href="{{ url_for('shop', category_name=category_name, manufacturer=manufacturer) }}">
+                            {% if request.args.get('manufacturer') == manufacturer %}
+                            <a href="{{ url_for('shop', category_name=category_name, min_price=request.args.get('min_price'), max_price=request.args.get('max_price')) }}" class="active">
                                 {{ manufacturer }}
                             </a>
+                            {% else %}
+                            <a href="{{ url_for('shop', category_name=category_name, manufacturer=manufacturer, min_price=request.args.get('min_price'), max_price=request.args.get('max_price')) }}">
+                                {{ manufacturer }}
+                            </a>
+                            {% endif %}
                         </li>
                         {% endfor %}
                     </ul>
@@ -49,14 +55,26 @@
                     <h3>Price</h3>
                     <ul>
                         <li>
-                            <a href="{{ url_for('shop', category_name=category_name, manufacturer=manufacturer, min_price=0, max_price=500.00) }}" class="price-filter" data-min="0" data-max="500.00">
+                            {% if request.args.get('min_price') is not none and request.args.get('min_price')|float == 0.0 %}
+                            <a href="{{ url_for('shop', category_name=category_name, manufacturer=request.args.get('manufacturer')) }}" class="price-filter active" data-min="0" data-max="500.00">
                                 $0.00 - $500.00
                             </a>
+                            {% else %}
+                            <a href="{{ url_for('shop', category_name=category_name, manufacturer=request.args.get('manufacturer'), min_price=0, max_price=500.00) }}" class="price-filter" data-min="0" data-max="500.00">
+                                $0.00 - $500.00
+                            </a>
+                            {% endif %}
                         </li>
                         <li>
-                            <a href="{{ url_for('shop', category_name=category_name, manufacturer=manufacturer, min_price=500.01, max_price=max_price) }}" class="price-filter" data-min="500.01" data-max="{{ max_price }} + 10">
+                            {% if request.args.get('min_price') is not none and request.args.get('min_price')|float == 500.01 %}
+                            <a href="{{ url_for('shop', category_name=category_name, manufacturer=request.args.get('manufacturer')) }}" class="price-filter active" data-min="500.01" data-max="{{ max_price }} + 10">
                                 $500.00 - ${{ max_price }}
                             </a>
+                            {% else %}
+                            <a href="{{ url_for('shop', category_name=category_name, manufacturer=request.args.get('manufacturer'), min_price=500.01, max_price=max_price) }}" class="price-filter" data-min="500.01" data-max="{{ max_price }} + 10">
+                                $500.00 - ${{ max_price }}
+                            </a>
+                            {% endif %}
                         </li>
                     </ul>
                 </div>
@@ -157,7 +175,13 @@
                                     </div>
                                     <div class="product_action">
                                         <ul>
-                                            <li class="product_cart"><a href="cart.html" title="" data-original-title="Add to Cart">Add to Cart</a></li>
+                                            <li class="product_cart">
+                                                <form id="add-form-{{ product.id }}_grid" action="{{ url_for('add_to_cart') }}" method="POST" style="display: none;">
+                                                    <input type="hidden" name="product_id" value="{{ product.id }}">
+                                                    <input type="hidden" name="quantity" value="1">
+                                                </form>
+                                                <a href="javascript:void(0)" onclick="document.getElementById('add-form-{{ product.id }}_grid').submit();" title="" data-original-title="Add to Cart">Add to Cart</a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>    
@@ -199,7 +223,13 @@
                                         </div>
                                         <div class="product_action">
                                             <ul>
-                                                <li class="product_cart"><a href="cart.html" title="" data-original-title="Add to Cart">Add to Cart</a></li>
+                                                <li class="product_cart">
+                                                    <form id="add-form-{{ product.id }}_list" action="{{ url_for('add_to_cart') }}" method="POST" style="display: none;">
+                                                        <input type="hidden" name="product_id" value="{{ product.id }}">
+                                                        <input type="hidden" name="quantity" value="1">
+                                                    </form>
+                                                    <a href="javascript:void(0)" onclick="document.getElementById('add-form-{{ product.id }}_list').submit();" title="" data-original-title="Add to Cart">Add to Cart</a>
+                                                </li>
                                             </ul>
                                         </div>
                                     </div>

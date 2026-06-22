@@ -33,7 +33,13 @@
                                     </div>
                                     <div class="product_action">
                                         <ul>
-                                            <li class="product_cart"><a href="cart.html" title="" data-original-title="Add to Cart">Add to Cart</a></li>
+                                            <li class="product_cart">
+                                                <form id="add-form-{{ product.id }}_category" action="{{ url_for('add_to_cart') }}" method="POST" style="display: none;">
+                                                    <input type="hidden" name="product_id" value="{{ product.id }}">
+                                                    <input type="hidden" name="quantity" value="1">
+                                                </form>
+                                                <a href="javascript:void(0)" onclick="document.getElementById('add-form-{{ product.id }}_category').submit();" title="" data-original-title="Add to Cart">Add to Cart</a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>    

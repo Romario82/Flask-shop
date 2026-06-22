@@ -40,16 +40,26 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for product in cart.values() %}
+                                {% if not cart_items %}
                                 <tr>
-                                  <td class="product_remove"><img src="{{ url_for('uploaded_file', filename=product.image) }}" alt=""></td>
-                                  <td class="product_remove">{{ product.name }}</td>
-                                  <td class="product_remove">{{ product.quantity }}</td>
-                                  <td class="product_remove">${{ product.price }}</td>
-                                  <td class="product_remove">${{ product.price * product.quantity }}</td>
+                                    <td colspan="6" class="text-center">Your cart is empty.</td>
+                                </tr>
+                                {% endif %}
+                                {% for item in cart_items %}
+                                <tr>
+                                  <td class="product_thumb"><a href="{{ url_for('product_details', name=item.product.name) }}"><img src="{{ url_for('uploaded_file', filename=item.product.image) }}" alt="" style="max-width: 80px;"></a></td>
+                                  <td class="product_name"><a href="{{ url_for('product_details', name=item.product.name) }}">{{ item.product.name }}</a></td>
+                                  <td class="product-price">${{ "%.2f"|format(item.product.effective_price) }}</td>
+                                  <td class="product_quantity">
+                                    <form action="{{ url_for('update_cart_quantity') }}" method="POST" class="qty-form">
+                                        <input type="hidden" name="product_id" value="{{ item.product_id }}">
+                                        <input min="1" max="100" name="quantity" value="{{ item.quantity }}" type="number" onchange="this.form.submit()">
+                                    </form>
+                                  </td>
+                                  <td class="product_total">${{ "%.2f"|format(item.product.effective_price * item.quantity) }}</td>
                                   <td class="product_remove">
                                     <form action="{{ url_for('remove_from_cart') }}" method="POST" style="display:inline;">
-                                        <input type="hidden" name="product_id" value="{{ product_id }}">
+                                        <input type="hidden" name="product_id" value="{{ item.product_id }}">
                                         <button type="submit" class="remove-btn"><i class="fa fa-trash-o"></i></button>
                                       </form>
                                   </td>
@@ -63,12 +73,10 @@
                                 <div class="coupon_inner">
                                    <div class="cart_subtotal">
                                        <p>Total</p>
-                                       <p class="cart_amount">{{ total }}$</p>
+                                       <p class="cart_amount">${{ "%.2f"|format(cart_total) }}</p>
                                    </div>
                                    <div class="checkout_btn">
-                                    <form action="/checkout" method="POST">
-                                        <button type="submit">Checkout</button>
-                                    </form>
+                                    <a href="{{ url_for('checkout') }}">Proceed to Checkout</a>
                                    </div>
                                 </div>
                             </div>
